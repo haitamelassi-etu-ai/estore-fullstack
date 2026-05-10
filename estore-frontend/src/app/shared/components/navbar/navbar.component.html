@@ -1,0 +1,53 @@
+<nav class="navbar navbar-expand-lg border-bottom border-secondary-subtle sticky-top app-navbar">
+  <div class="container">
+    <a class="navbar-brand fw-semibold text-light" routerLink="/">E-Store</a>
+
+    <button
+      class="navbar-toggler border-secondary"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#estoreNavbar"
+      aria-controls="estoreNavbar"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="estoreNavbar">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link text-light" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-light" routerLink="/catalog" routerLinkActive="active">Catalog</a>
+        </li>
+        <li class="nav-item" *ngIf="authService.isLoggedIn()">
+          <a class="nav-link text-light" routerLink="/orders" routerLinkActive="active">Orders</a>
+        </li>
+        <li class="nav-item" *ngIf="authService.isLoggedIn()">
+          <a class="nav-link text-light" routerLink="/profile" routerLinkActive="active">Profile</a>
+        </li>
+      </ul>
+
+      <div class="d-flex align-items-center gap-2">
+        <a routerLink="/cart" class="btn btn-outline-light position-relative">
+          Cart
+          <span *ngIf="cartCount" class="position-absolute top-0 start-100 translate-middle badge rounded-pill text-bg-warning">
+            {{ cartCount }}
+          </span>
+        </a>
+
+        <ng-container *ngIf="authService.isLoggedIn(); else guestActions">
+          <span class="small text-secondary">{{ currentUser?.firstName }}</span>
+          <button class="btn btn-sm btn-outline-warning" type="button" (click)="logout()">Logout</button>
+        </ng-container>
+
+        <ng-template #guestActions>
+          <a routerLink="/auth/login" class="btn btn-sm btn-warning">Login</a>
+          <a routerLink="/auth/register" class="btn btn-sm btn-outline-light">Register</a>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</nav>

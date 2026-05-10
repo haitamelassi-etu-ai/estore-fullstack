@@ -1,0 +1,14 @@
+<div class="toast-stack">
+  <article
+    *ngFor="let toast of toasts; trackBy: trackToast"
+    class="app-toast"
+    [ngClass]="'toast-' + toast.type"
+    @toastState
+  >
+    <div class="toast-body">
+      <strong>{{ toast.title }}</strong>
+      <p class="mb-0">{{ toast.message }}</p>
+    </div>
+    <button type="button" class="btn-close btn-close-white" aria-label="Close" (click)="dismiss(toast.id)"></button>
+  </article>
+</div>

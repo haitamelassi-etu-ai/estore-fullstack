@@ -1,0 +1,82 @@
+<div class="orders-wrap">
+  <div class="orders-header">
+    <div class="sec-label">Mon compte</div>
+    <h1 class="orders-title">Mes commandes</h1>
+    <p class="orders-sub" *ngIf="!loading && orders.length">
+      {{ orders.length }} commande<span *ngIf="orders.length > 1">s</span> au total
+    </p>
+  </div>
+
+  <div class="loading-state" *ngIf="loading">
+    <div class="loader-ring"></div>
+    <p>Chargement de vos commandes…</p>
+  </div>
+
+  <div class="empty-state" *ngIf="!loading && !orders.length">
+    <div class="empty-icon"><app-icon name="orders" [size]="48" [strokeWidth]="1.25"></app-icon></div>
+    <h3>Aucune commande pour le moment</h3>
+    <p>Découvrez notre catalogue et passez votre première commande</p>
+    <a routerLink="/catalog" class="btn btn-gold">Commencer les achats →</a>
+  </div>
+
+  <div class="orders-list" *ngIf="!loading && orders.length">
+    <div class="order-card" *ngFor="let order of orders">
+      <!-- Header -->
+      <div class="order-head">
+        <div class="order-meta">
+          <div class="order-id-row">
+            <span class="order-label">Commande</span>
+            <strong class="order-id">#{{ order.id }}</strong>
+          </div>
+          <div class="order-date">
+            <app-icon name="orders" [size]="13" [strokeWidth]="1.5"></app-icon>
+            {{ order.orderDate | date:'dd MMMM yyyy' }}
+          </div>
+        </div>
+        <span class="order-status" [ngClass]="statusClass(order.status)">
+          <span class="status-dot"></span>
+          {{ statusLabel(order.status) }}
+        </span>
+      </div>
+
+      <!-- Items -->
+      <div class="order-items">
+        <div class="order-item" *ngFor="let item of order.items">
+          <div class="oi-img">
+            <img *ngIf="item.product.imageUrl" [src]="item.product.imageUrl" [alt]="item.product.name">
+            <span class="oi-emoji" *ngIf="!item.product.imageUrl">{{ item.product.icon }}</span>
+          </div>
+          <div class="oi-info">
+            <h4 class="oi-name">{{ item.product.name }}</h4>
+            <span class="oi-cat" *ngIf="item.product.category">{{ item.product.category.name }}</span>
+            <div class="oi-meta">
+              <span class="oi-qty">Qté : {{ item.quantity }}</span>
+              <span class="oi-price">{{ item.unitPrice | currency:'EUR':'symbol':'1.2-2' }} / unité</span>
+            </div>
+          </div>
+          <div class="oi-total">
+            {{ (item.unitPrice * item.quantity) | currency:'EUR':'symbol':'1.2-2' }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="order-foot">
+        <div class="foot-left">
+          <div class="foot-row" *ngIf="order.shippingAddress">
+            <app-icon name="map-pin" [size]="14" [strokeWidth]="1.5"></app-icon>
+            <span>{{ order.shippingAddress }}</span>
+          </div>
+          <div class="foot-row">
+            <app-icon name="truck" [size]="14" [strokeWidth]="1.5"></app-icon>
+            <span>Livraison gratuite</span>
+          </div>
+        </div>
+        <div class="foot-total">
+          <span class="foot-label">Total commande</span>
+          <strong class="foot-amount">{{ order.totalAmount | currency:'EUR':'symbol':'1.2-2' }}</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

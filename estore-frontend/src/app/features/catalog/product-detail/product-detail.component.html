@@ -1,0 +1,120 @@
+<section *ngIf="loadingProduct" class="alert alert-secondary">Loading product details...</section>
+
+<ng-container *ngIf="!loadingProduct && product as currentProduct">
+  <div class="mb-4">
+    <a routerLink="/catalog" class="link-warning text-decoration-none">← Back to catalog</a>
+  </div>
+
+  <div class="card product-detail-card mb-4">
+    <div class="card-body p-4">
+      <div class="row g-4">
+        <div class="col-md-5">
+          <img
+            *ngIf="currentProduct.imageUrl; else noImage"
+            [src]="currentProduct.imageUrl"
+            [alt]="currentProduct.name"
+            class="img-fluid rounded detail-image"
+          />
+          <ng-template #noImage>
+            <div class="placeholder-image rounded d-flex justify-content-center align-items-center">
+              {{ currentProduct.name.charAt(0) }}
+            </div>
+          </ng-template>
+        </div>
+
+        <div class="col-md-7">
+          <span class="badge text-bg-dark mb-2">{{ currentProduct.category.name }}</span>
+          <h1 class="h3 mb-3">{{ currentProduct.name }}</h1>
+          <p class="text-secondary">{{ currentProduct.description }}</p>
+          <p class="h4 mb-3">{{ currentProduct.price | currency:'EUR':'symbol':'1.2-2' }}</p>
+
+          <p class="mb-3" [class.text-danger]="currentProduct.inventoryQuantity < 1">
+            Stock available: {{ currentProduct.inventoryQuantity }}
+          </p>
+
+          <div class="d-flex align-items-center gap-2 mb-3">
+            <button class="btn btn-outline-light" type="button" (click)="decreaseQuantity()" [disabled]="quantity <= 1">-</button>
+            <input class="form-control quantity-input text-center" type="number" [value]="quantity" min="1" [max]="maxQuantity" readonly />
+            <button
+              class="btn btn-outline-light"
+              type="button"
+              (click)="increaseQuantity()"
+              [disabled]="quantity >= maxQuantity"
+            >
+              +
+            </button>
+          </div>
+
+          <button
+            class="btn btn-warning"
+            type="button"
+            [disabled]="addingToCart || currentProduct.inventoryQuantity < 1"
+            (click)="addToCart()"
+          >
+            {{ addingToCart ? 'Adding...' : 'Add to cart' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section class="reviews-panel card product-detail-card">
+    <div class="card-body p-4">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="h5 mb-0">Customer reviews</h2>
+        <button
+          *ngIf="authService.isLoggedIn()"
+          class="btn btn-sm btn-outline-warning"
+          type="button"
+          (click)="toggleReviewForm()"
+        >
+          {{ reviewFormVisible ? 'Cancel' : 'Write a review' }}
+        </button>
+      </div>
+
+      <form
+        *ngIf="reviewFormVisible && authService.isLoggedIn()"
+        [formGroup]="reviewForm"
+        (ngSubmit)="submitReview()"
+        class="mb-4"
+      >
+        <div class="row g-3">
+          <div class="col-md-3">
+            <label class="form-label">Rating</label>
+            <input type="number" class="form-control" min="1" max="5" formControlName="rating" />
+            <div class="text-danger small mt-1" *ngIf="reviewForm.controls.rating.touched && reviewForm.controls.rating.invalid">
+              Enter a rating between 1 and 5.
+            </div>
+          </div>
+          <div class="col-md-9">
+            <label class="form-label">Comment</label>
+            <textarea class="form-control" rows="3" formControlName="comment"></textarea>
+            <div class="text-danger small mt-1" *ngIf="reviewForm.controls.comment.touched && reviewForm.controls.comment.errors?.['required']">
+              Comment is required.
+            </div>
+            <div class="text-danger small mt-1" *ngIf="reviewForm.controls.comment.touched && reviewForm.controls.comment.errors?.['minlength']">
+              Comment must be at least 10 characters.
+            </div>
+          </div>
+        </div>
+        <button class="btn btn-warning mt-3" type="submit" [disabled]="submittingReview">
+          {{ submittingReview ? 'Submitting...' : 'Submit review' }}
+        </button>
+      </form>
+
+      <div class="alert alert-secondary" *ngIf="loadingReviews">Loading reviews...</div>
+      <div *ngIf="!loadingReviews && !reviews.length" class="text-secondary">No reviews yet.</div>
+
+      <div class="review-list d-grid gap-3" *ngIf="!loadingReviews && reviews.length">
+        <article class="review-item p-3 rounded" *ngFor="let review of reviews">
+          <div class="d-flex justify-content-between align-items-center mb-1">
+            <strong>{{ review.authorName || 'Anonymous' }}</strong>
+            <small class="text-secondary">{{ review.createdAt | date:'dd/MM/yyyy' }}</small>
+          </div>
+          <div class="text-warning small mb-1">Rating: {{ review.rating }}/5</div>
+          <p class="mb-0 text-secondary">{{ review.comment }}</p>
+        </article>
+      </div>
+    </div>
+  </section>
+</ng-container>

@@ -1,0 +1,121 @@
+<div class="breadcrumb">
+  <a routerLink="/catalog">Catalogue</a> › {{ product?.name }}
+</div>
+
+<div class="detail-grid" *ngIf="product">
+  <!-- Image -->
+  <div class="detail-left">
+    <div class="detail-img-wrap">
+      <img *ngIf="product.imageUrl" class="detail-img-real" [src]="product.imageUrl" [alt]="product.name">
+      <span *ngIf="!product.imageUrl">{{ product.icon }}</span>
+    </div>
+    <div class="detail-thumbs">
+      <div class="thumb active">
+        <img *ngIf="product.imageUrl" [src]="product.imageUrl" [alt]="product.name" style="width:100%;height:100%;object-fit:cover;border-radius:6px;">
+        <span *ngIf="!product.imageUrl">{{ product.icon }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Info -->
+  <div class="detail-right">
+    <div class="detail-cat">{{ product.category?.name }}</div>
+    <h1 class="detail-title">{{ product.name }}</h1>
+
+    <div class="detail-rating">
+      <span class="stars-lg">★★★★★</span>
+      <span class="rating-count">({{ product.reviewCount || 0 }} avis)</span>
+    </div>
+
+    <div class="detail-price">
+      {{ product.price | currency:'EUR':'symbol':'1.2-2' }}
+      <s *ngIf="product.oldPrice">{{ product.oldPrice | currency:'EUR':'symbol':'1.2-2' }}</s>
+    </div>
+
+    <p class="detail-desc">{{ product.description }}</p>
+
+    <div class="detail-stock">
+      <div class="stock-dot" [class.stock-low]="product.inventoryQuantity && product.inventoryQuantity <= 5"></div>
+      <span *ngIf="product.inventoryQuantity && product.inventoryQuantity > 5">
+        En stock — {{ product.inventoryQuantity }} disponibles
+      </span>
+      <span *ngIf="product.inventoryQuantity && product.inventoryQuantity <= 5" style="color:#f87171;">
+        ⚠ Seulement {{ product.inventoryQuantity }} restants !
+      </span>
+      <span *ngIf="!product.inventoryQuantity" style="color:#f87171;">Rupture de stock</span>
+    </div>
+
+    <div class="qty-row">
+      <span class="qty-label">Quantité</span>
+      <div class="qty-ctrl">
+        <button class="qty-btn" (click)="changeQty(-1)">−</button>
+        <input class="qty-num" type="number" [value]="quantity" readonly>
+        <button class="qty-btn" (click)="changeQty(1)">+</button>
+      </div>
+    </div>
+
+    <div class="features-grid">
+      <div class="feat-item"><app-icon name="truck" [size]="15" [strokeWidth]="1.75"></app-icon> Livraison gratuite dès 49€</div>
+      <div class="feat-item"><app-icon name="arrow-return" [size]="15" [strokeWidth]="1.75"></app-icon> Retour 30 jours</div>
+      <div class="feat-item"><app-icon name="shield-check" [size]="15" [strokeWidth]="1.75"></app-icon> Garantie 2 ans</div>
+      <div class="feat-item"><app-icon name="credit-card" [size]="15" [strokeWidth]="1.75"></app-icon> Paiement sécurisé</div>
+    </div>
+
+    <div class="detail-actions">
+      <button class="btn btn-gold btn-lg"
+        [disabled]="loading || !product.inventoryQuantity"
+        (click)="addToCart()">
+        {{ loading ? 'Ajout…' : '🛒 Ajouter au panier' }}
+      </button>
+      <button class="btn btn-ghost btn-lg">♡ Favoris</button>
+    </div>
+  </div>
+</div>
+
+<!-- Reviews -->
+<div class="reviews-section" *ngIf="product">
+  <div class="review-header">
+    <div>
+      <h2>Avis clients</h2>
+      <p>{{ reviews.length }} avis vérifiés</p>
+    </div>
+    <button class="btn btn-ghost" *ngIf="authService.isLoggedIn" (click)="showReviewForm = !showReviewForm">
+      {{ showReviewForm ? 'Annuler' : 'Écrire un avis' }}
+    </button>
+  </div>
+
+  <!-- Add review form (MongoDB) -->
+  <form class="review-form" *ngIf="showReviewForm" [formGroup]="reviewForm" (ngSubmit)="submitReview()">
+    <div class="form-group">
+      <label>Note</label>
+      <select formControlName="rating">
+        <option *ngFor="let n of [5,4,3,2,1]" [value]="n">{{ n }} ★</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Commentaire</label>
+      <textarea formControlName="comment" rows="3" placeholder="Partagez votre expérience…"></textarea>
+      <div class="err-msg" *ngIf="reviewForm.get('comment')?.invalid && reviewForm.get('comment')?.touched">
+        Minimum 10 caractères.
+      </div>
+    </div>
+    <button type="submit" class="btn btn-gold">Publier l'avis</button>
+  </form>
+
+  <div class="reviews-list">
+    <div class="review-card" *ngFor="let r of reviews">
+      <div class="review-top">
+        <div class="avatar">{{ r.authorName | slice:0:2 | uppercase }}</div>
+        <div class="review-meta">
+          <strong>{{ r.authorName }}</strong>
+          <small>{{ r.createdAt | date:'dd/MM/yyyy' }}</small>
+        </div>
+        <span class="review-stars" style="margin-left:auto;">
+          <ng-container *ngFor="let s of stars(r.rating)">{{ s }}</ng-container>
+        </span>
+      </div>
+      <p class="review-text">{{ r.comment }}</p>
+    </div>
+    <div class="no-reviews" *ngIf="reviews.length === 0">Aucun avis pour ce produit.</div>
+  </div>
+</div>

@@ -1,0 +1,45 @@
+<section>
+  <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-end gap-3 mb-4">
+    <div>
+      <h1 class="h3 mb-1">Catalog</h1>
+      <p class="text-secondary mb-0">Browse products and add items to your cart.</p>
+    </div>
+    <div class="row g-2 controls-row">
+      <div class="col-12 col-md-4">
+        <input class="form-control" type="search" [formControl]="searchControl" placeholder="Search products..." />
+      </div>
+      <div class="col-6 col-md-4">
+        <select class="form-select" [ngModel]="selectedCategory" (ngModelChange)="onCategoryChange($event)">
+          <option value="">All categories</option>
+          <option *ngFor="let category of categories" [value]="category.id">
+            {{ category.name }}
+          </option>
+        </select>
+      </div>
+      <div class="col-6 col-md-4">
+        <select class="form-select" [ngModel]="selectedSort" (ngModelChange)="onSortChange($event)">
+          <option value="none">Sort by</option>
+          <option value="price-asc">Price: low to high</option>
+          <option value="price-desc">Price: high to low</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="alert alert-secondary" *ngIf="loadingCategories">Loading categories...</div>
+  <div class="alert alert-secondary" *ngIf="loadingProducts">Loading products...</div>
+
+  <div class="row g-3" *ngIf="!loadingProducts && filteredProducts.length">
+    <div class="col-sm-6 col-lg-4 col-xl-3" *ngFor="let product of filteredProducts; trackBy: trackByProduct">
+      <app-product-card
+        [product]="product"
+        (addToCart)="addToCart($event)"
+        (viewDetail)="viewDetail($event)"
+      ></app-product-card>
+    </div>
+  </div>
+
+  <div class="alert alert-dark border-secondary-subtle" *ngIf="!loadingProducts && !filteredProducts.length">
+    No products match your current filters.
+  </div>
+</section>

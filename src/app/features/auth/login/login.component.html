@@ -1,0 +1,38 @@
+<div class="auth-page">
+  <div class="auth-card">
+    <h2>Connexion</h2>
+    <p>Bon retour sur E·Store</p>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label>Adresse e-mail</label>
+        <input type="email" formControlName="email" placeholder="vous@email.com"
+          [class.error]="f['email'].invalid && f['email'].touched">
+        <div class="err-msg" *ngIf="f['email'].invalid && f['email'].touched">
+          <span *ngIf="f['email'].errors?.['required']">E-mail requis.</span>
+          <span *ngIf="f['email'].errors?.['email']">Format d'e-mail invalide.</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Mot de passe</label>
+        <input type="password" formControlName="password" placeholder="••••••••"
+          [class.error]="f['password'].invalid && f['password'].touched">
+        <div class="err-msg" *ngIf="f['password'].invalid && f['password'].touched">
+          Mot de passe trop court (min. 6 caractères).
+        </div>
+      </div>
+
+      <div class="err-msg" *ngIf="error" style="margin-bottom:1rem;">{{ error }}</div>
+
+      <button type="submit" class="btn btn-gold btn-full" [disabled]="loading">
+        <span *ngIf="!loading">Se connecter</span>
+        <span *ngIf="loading">Connexion…</span>
+      </button>
+    </form>
+
+    <div class="form-note">
+      Pas encore de compte ? <a routerLink="/auth/register">Créer un compte</a>
+    </div>
+  </div>
+</div>

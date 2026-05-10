@@ -1,0 +1,136 @@
+<!-- Animated background orbs -->
+<div class="hero-orbs" aria-hidden="true">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+</div>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="sec-label hero-label">Collection 2025</div>
+    <h1 class="hero-title">L'excellence<br><em>à portée de clic</em></h1>
+    <p class="hero-sub">
+      Découvrez une sélection premium de produits soigneusement choisis pour vous.
+      Qualité garantie, livraison express, retour facile.
+    </p>
+    <div class="hero-actions">
+      <button class="btn btn-gold btn-lg" (click)="goToCatalog()">Explorer le catalogue →</button>
+      <a routerLink="/auth/register" class="btn btn-ghost btn-lg">Créer un compte</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat">
+        <strong data-count="500" data-suffix="+">500+</strong>
+        <span>Produits</span>
+      </div>
+      <div class="stat-div"></div>
+      <div class="stat">
+        <strong data-count="10000" data-suffix=" +">10 000 +</strong>
+        <span>Clients</span>
+      </div>
+      <div class="stat-div"></div>
+      <div class="stat">
+        <strong data-count="4.9" data-suffix="★" data-decimals="1">4.9★</strong>
+        <span>Note moyenne</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-visual">
+    <div class="hero-card">
+      <div class="hc-icon">
+        <app-icon name="shopping-bag" [size]="80" [strokeWidth]="1"></app-icon>
+      </div>
+      <div class="hc-label">Shopping premium</div>
+    </div>
+    <div class="hero-float hero-float--1">
+      <app-icon name="package" [size]="36" [strokeWidth]="1.25"></app-icon>
+    </div>
+    <div class="hero-float hero-float--2">
+      <app-icon name="star" [size]="32" [strokeWidth]="1.25"></app-icon>
+    </div>
+    <div class="hero-float hero-float--3">
+      <app-icon name="sparkles" [size]="30" [strokeWidth]="1.25"></app-icon>
+    </div>
+  </div>
+</section>
+
+<!-- ── FEATURES ── -->
+<section class="features-section">
+  <div class="sec-label" style="text-align:center">Pourquoi E·Store ?</div>
+  <h2 class="sec-title" style="text-align:center;margin-bottom:2.5rem">Une expérience unique</h2>
+  <div class="feat-grid">
+    <div class="feat-card">
+      <div class="feat-icon"><app-icon name="truck" [size]="30" [strokeWidth]="1.5"></app-icon></div>
+      <h3>Livraison gratuite</h3>
+      <p>Dès 49€ d'achat, livraison express en 24h/48h partout au Maroc.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon"><app-icon name="shield-check" [size]="30" [strokeWidth]="1.5"></app-icon></div>
+      <h3>Garantie 2 ans</h3>
+      <p>Tous nos produits sont couverts par une garantie constructeur de 2 ans.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon"><app-icon name="arrow-return" [size]="30" [strokeWidth]="1.5"></app-icon></div>
+      <h3>Retour 30 jours</h3>
+      <p>Pas satisfait ? Retournez votre commande sous 30 jours sans frais.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon"><app-icon name="credit-card" [size]="30" [strokeWidth]="1.5"></app-icon></div>
+      <h3>Paiement sécurisé</h3>
+      <p>Transactions cryptées SSL. Vos données bancaires sont protégées.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── CATEGORIES ── -->
+<section class="categories-section">
+  <div class="sec-label" style="text-align:center">Explorer par univers</div>
+  <h2 class="sec-title" style="text-align:center;margin-bottom:2.5rem">Nos catégories</h2>
+  <div class="cat-grid">
+    <div class="cat-card" *ngFor="let cat of categories" (click)="goToCatalog()">
+      <div class="cat-icon">
+        <app-icon *ngIf="cat.name === 'Électronique'" name="monitor"   [size]="32" [strokeWidth]="1.5"></app-icon>
+        <app-icon *ngIf="cat.name === 'Audio'"        name="headphones" [size]="32" [strokeWidth]="1.5"></app-icon>
+        <app-icon *ngIf="cat.name === 'Mode'"         name="tag"        [size]="32" [strokeWidth]="1.5"></app-icon>
+        <app-icon *ngIf="cat.name === 'Maison'"       name="home"       [size]="32" [strokeWidth]="1.5"></app-icon>
+        <app-icon *ngIf="cat.name === 'Sport'"        name="bolt"       [size]="32" [strokeWidth]="1.5"></app-icon>
+        <app-icon *ngIf="cat.name === 'Livres'"       name="book-open"  [size]="32" [strokeWidth]="1.5"></app-icon>
+      </div>
+      <div class="cat-name">{{ cat.name }}</div>
+      <div class="cat-desc">{{ cat.description }}</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FEATURED PRODUCTS ── -->
+<section class="featured-section" *ngIf="featuredProducts.length">
+  <div class="sec-label" style="text-align:center">Sélection du moment</div>
+  <h2 class="sec-title" style="text-align:center;margin-bottom:2.5rem">Produits en vedette</h2>
+  <div class="featured-grid">
+    <app-product-card
+      *ngFor="let p of featuredProducts"
+      [product]="p"
+      (addToCart)="addToCart(p)"
+      (viewDetail)="viewProduct(p)">
+    </app-product-card>
+  </div>
+  <div style="text-align:center;margin-top:2.5rem">
+    <button class="btn btn-ghost btn-lg" (click)="goToCatalog()">Voir tous les produits →</button>
+  </div>
+</section>
+
+<!-- ── CTA BANNER ── -->
+<section class="cta-section">
+  <div class="cta-inner">
+    <div class="cta-text">
+      <div class="sec-label">Offre exclusive</div>
+      <h2>Rejoignez E·Store<br>et profitez de <em>−10%</em></h2>
+      <p>Créez votre compte dès aujourd'hui et utilisez le code <strong>ESTORE10</strong> pour votre première commande.</p>
+    </div>
+    <div class="cta-actions">
+      <a routerLink="/auth/register" class="btn btn-gold btn-lg">S'inscrire gratuitement</a>
+      <a routerLink="/catalog" class="btn btn-ghost btn-lg">Parcourir le catalogue</a>
+    </div>
+  </div>
+</section>

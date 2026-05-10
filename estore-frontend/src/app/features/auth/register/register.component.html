@@ -1,0 +1,93 @@
+<section class="auth-wrapper">
+  <div class="card auth-card">
+    <div class="card-body p-4 p-md-5">
+      <h1 class="h3 mb-2">Create account</h1>
+      <p class="text-secondary mb-4">Join E-Store and start shopping.</p>
+
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label" for="registerFirstName">First name</label>
+            <input
+              id="registerFirstName"
+              type="text"
+              class="form-control"
+              formControlName="firstName"
+              [class.is-invalid]="form.controls.firstName.touched && form.controls.firstName.invalid"
+            />
+            <div class="invalid-feedback" *ngIf="form.controls.firstName.touched && form.controls.firstName.invalid">
+              First name must be at least 2 characters.
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label" for="registerLastName">Last name</label>
+            <input
+              id="registerLastName"
+              type="text"
+              class="form-control"
+              formControlName="lastName"
+              [class.is-invalid]="form.controls.lastName.touched && form.controls.lastName.invalid"
+            />
+            <div class="invalid-feedback" *ngIf="form.controls.lastName.touched && form.controls.lastName.invalid">
+              Last name must be at least 2 characters.
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-3 mt-3">
+          <label class="form-label" for="registerEmail">Email</label>
+          <input
+            id="registerEmail"
+            type="email"
+            class="form-control"
+            formControlName="email"
+            [class.is-invalid]="form.controls.email.touched && form.controls.email.invalid"
+          />
+          <div class="invalid-feedback" *ngIf="form.controls.email.touched && form.controls.email.invalid">
+            Enter a valid email.
+          </div>
+        </div>
+
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label" for="registerPassword">Password</label>
+            <input
+              id="registerPassword"
+              type="password"
+              class="form-control"
+              formControlName="password"
+              [class.is-invalid]="form.controls.password.touched && form.controls.password.invalid"
+            />
+            <div class="invalid-feedback" *ngIf="form.controls.password.touched && form.controls.password.invalid">
+              Password must be at least 8 characters.
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label" for="registerConfirmPassword">Confirm password</label>
+            <input
+              id="registerConfirmPassword"
+              type="password"
+              class="form-control"
+              formControlName="confirmPassword"
+              [class.is-invalid]="form.controls.confirmPassword.touched && form.errors?.['mismatch']"
+            />
+            <div class="invalid-feedback" *ngIf="form.controls.confirmPassword.touched && form.errors?.['mismatch']">
+              Passwords do not match.
+            </div>
+          </div>
+        </div>
+
+        <div class="alert alert-danger py-2 mt-3" *ngIf="serverError">{{ serverError }}</div>
+
+        <button class="btn btn-warning w-100 mt-3" type="submit" [disabled]="loading">
+          {{ loading ? 'Creating account...' : 'Create account' }}
+        </button>
+      </form>
+
+      <p class="mb-0 mt-3 text-secondary">
+        Already registered?
+        <a routerLink="/auth/login">Sign in</a>
+      </p>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,59 @@
+<section class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
+  <div>
+    <h1 class="h3 mb-1">Profile</h1>
+    <p class="text-secondary mb-0">Manage your account information.</p>
+  </div>
+  <a routerLink="/orders" class="btn btn-outline-warning">View orders</a>
+</section>
+
+<div class="alert alert-secondary" *ngIf="loading">Loading profile...</div>
+
+<form *ngIf="!loading" [formGroup]="form" (ngSubmit)="saveProfile()" class="card profile-card">
+  <div class="card-body p-4">
+    <div class="row g-3">
+      <div class="col-md-6">
+        <label class="form-label" for="profileFirstName">First name</label>
+        <input id="profileFirstName" class="form-control" formControlName="firstName" />
+        <div class="text-danger small mt-1" *ngIf="form.controls.firstName.touched && form.controls.firstName.invalid">
+          First name must be at least 2 characters.
+        </div>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label" for="profileLastName">Last name</label>
+        <input id="profileLastName" class="form-control" formControlName="lastName" />
+        <div class="text-danger small mt-1" *ngIf="form.controls.lastName.touched && form.controls.lastName.invalid">
+          Last name must be at least 2 characters.
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label" for="profileEmail">Email</label>
+        <input id="profileEmail" class="form-control" formControlName="email" type="email" />
+        <div class="text-danger small mt-1" *ngIf="form.controls.email.touched && form.controls.email.invalid">
+          Enter a valid email.
+        </div>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label" for="profilePhone">Phone</label>
+        <input id="profilePhone" class="form-control" formControlName="phone" />
+      </div>
+
+      <div class="col-12">
+        <label class="form-label" for="profileAddress">Address</label>
+        <input id="profileAddress" class="form-control" formControlName="address" />
+      </div>
+      <div class="col-md-6">
+        <label class="form-label" for="profileCity">City</label>
+        <input id="profileCity" class="form-control" formControlName="city" />
+      </div>
+      <div class="col-md-6">
+        <label class="form-label" for="profileCountry">Country</label>
+        <input id="profileCountry" class="form-control" formControlName="country" />
+      </div>
+    </div>
+
+    <button class="btn btn-warning mt-4" type="submit" [disabled]="saving">
+      {{ saving ? 'Saving...' : 'Save profile' }}
+    </button>
+  </div>
+</form>

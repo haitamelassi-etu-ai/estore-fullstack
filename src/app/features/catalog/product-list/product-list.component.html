@@ -1,0 +1,61 @@
+<section class="catalog-section">
+  <!-- Header -->
+  <div class="catalog-header">
+    <div>
+      <div class="sec-label">Notre sélection</div>
+      <h1 class="sec-title">Catalogue</h1>
+    </div>
+    <div class="catalog-controls">
+      <input
+        class="search-input"
+        type="text"
+        placeholder="🔍  Rechercher un produit..."
+        [ngModel]="searchTerm"
+        (ngModelChange)="onSearch($event)"
+      >
+      <select class="sort-select" [(ngModel)]="sortOption" (change)="applyFilters()">
+        <option value="default">Trier par</option>
+        <option value="price-asc">Prix croissant</option>
+        <option value="price-desc">Prix décroissant</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Category filters -->
+  <div class="cats">
+    <button
+      class="cat-pill"
+      [class.active]="selectedCategory === cat.name"
+      *ngFor="let cat of categories"
+      (click)="selectCategory(cat.name)"
+    >{{ cat.name }}</button>
+  </div>
+
+  <!-- Skeleton while loading -->
+  <div class="product-grid" *ngIf="loading">
+    <div class="skeleton-card" *ngFor="let i of skeletonItems">
+      <div class="skeleton-img skeleton"></div>
+      <div class="skeleton-body">
+        <div class="skeleton skeleton-line xshort"></div>
+        <div class="skeleton skeleton-line"></div>
+        <div class="skeleton skeleton-line short"></div>
+        <div class="skeleton skeleton-line xshort" style="margin-top:.4rem"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- No results -->
+  <div class="no-results" *ngIf="!loading && filteredProducts.length === 0">
+    Aucun produit trouvé pour votre recherche.
+  </div>
+
+  <!-- Grid -->
+  <div class="product-grid" *ngIf="!loading && filteredProducts.length > 0">
+    <app-product-card
+      *ngFor="let product of filteredProducts"
+      [product]="product"
+      (addToCart)="addToCart($event)"
+      (viewDetail)="viewDetail($event)"
+    ></app-product-card>
+  </div>
+</section>

@@ -1,0 +1,83 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  --font-heading: 'Cormorant Garamond', serif;
+  --font-body: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+
+  --color-bg: #0a0d14;
+  --color-surface: #141a29;
+  --color-surface-soft: #1c2440;
+  --color-border: #2f3b57;
+  --color-text: #f7f8fc;
+  --color-muted: #a4afc2;
+  --color-primary: #d4af37;
+  --color-primary-strong: #f2ca5b;
+  --color-success: #1f9d62;
+  --color-danger: #d14f62;
+  --shadow-soft: 0 14px 34px rgba(3, 8, 20, 0.35);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  background: radial-gradient(circle at top right, #131b2d, var(--color-bg) 45%);
+  color: var(--color-text);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.navbar-brand {
+  font-family: var(--font-heading);
+  letter-spacing: 0.02em;
+}
+
+a {
+  color: var(--color-primary);
+}
+
+a:hover {
+  color: var(--color-primary-strong);
+}
+
+.card,
+.form-control,
+.form-select,
+.table {
+  color: var(--color-text);
+}
+
+.form-control,
+.form-select {
+  background: #0f1522;
+  border-color: var(--color-border);
+}
+
+.form-control:focus,
+.form-select:focus {
+  background: #0f1522;
+  color: var(--color-text);
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.2);
+}
+
+.btn-warning {
+  color: #1b1b1b;
+  font-weight: 600;
+}
+
+.table-dark {
+  --bs-table-bg: transparent;
+}

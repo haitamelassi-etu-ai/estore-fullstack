@@ -1,0 +1,72 @@
+<div class="profile-wrap">
+  <!-- Sidebar -->
+  <aside class="profile-sidebar">
+    <div class="avatar-lg">{{ initials }}</div>
+    <h3>{{ authService.currentUser?.firstName }} {{ authService.currentUser?.lastName }}</h3>
+    <p>{{ authService.currentUser?.email }}</p>
+
+    <nav class="profile-nav">
+      <div class="pnav-item active">
+        <app-icon name="user" [size]="16"></app-icon> Informations personnelles
+      </div>
+      <div class="pnav-item" routerLink="/orders">
+        <app-icon name="orders" [size]="16"></app-icon> Mes commandes
+      </div>
+      <div class="pnav-item">
+        <app-icon name="map-pin" [size]="16"></app-icon> Mes adresses
+      </div>
+      <div class="pnav-item">
+        <app-icon name="lock" [size]="16"></app-icon> Sécurité
+      </div>
+      <div class="pnav-item logout" (click)="logout()">
+        <app-icon name="logout" [size]="16"></app-icon> Déconnexion
+      </div>
+    </nav>
+  </aside>
+
+  <!-- Content -->
+  <div class="profile-content">
+    <h2>Informations personnelles</h2>
+
+    <form [formGroup]="form" (ngSubmit)="save()">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Prénom</label>
+          <input type="text" formControlName="firstName">
+        </div>
+        <div class="form-group">
+          <label>Nom</label>
+          <input type="text" formControlName="lastName">
+        </div>
+        <div class="form-group">
+          <label>E-mail</label>
+          <input type="email" formControlName="email">
+        </div>
+        <div class="form-group">
+          <label>Téléphone</label>
+          <input type="tel" formControlName="phone" placeholder="+212 6 XX XX XX XX">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Adresse</label>
+        <input type="text" formControlName="address" placeholder="12 Rue Hassan II">
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Ville</label>
+          <input type="text" formControlName="city" placeholder="Casablanca">
+        </div>
+        <div class="form-group">
+          <label>Pays</label>
+          <input type="text" formControlName="country">
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-gold" [disabled]="loading">
+        {{ loading ? 'Sauvegarde…' : 'Sauvegarder les modifications' }}
+      </button>
+    </form>
+  </div>
+</div>

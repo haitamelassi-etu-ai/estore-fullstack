@@ -1,0 +1,29 @@
+<div class="product-card" (click)="viewDetail.emit(product)">
+  <div class="pc-img">
+    <span class="pc-badge new" *ngIf="product.badge === 'NEW'">Nouveau</span>
+    <span class="pc-badge sale" *ngIf="product.badge === 'SALE'">Promo</span>
+    <img *ngIf="product.imageUrl" class="pc-img-real" [src]="product.imageUrl" [alt]="product.name">
+    <span class="pc-emoji" *ngIf="!product.imageUrl">{{ product.icon }}</span>
+  </div>
+
+  <div class="pc-body">
+    <div class="pc-cat">{{ product.category?.name }}</div>
+    <div class="pc-stars">★★★★★</div>
+    <div class="pc-name">{{ product.name }}</div>
+    <div class="pc-desc">{{ product.description | slice:0:60 }}…</div>
+
+    <div class="stock-low" *ngIf="product.inventoryQuantity && product.inventoryQuantity <= 5">
+      ⚠ Plus que {{ product.inventoryQuantity }} en stock
+    </div>
+
+    <div class="pc-footer">
+      <div class="pc-price">
+        {{ product.price | currency:'EUR':'symbol':'1.2-2' }}
+        <span class="pc-price-old" *ngIf="product.oldPrice">
+          {{ product.oldPrice | currency:'EUR':'symbol':'1.2-2' }}
+        </span>
+      </div>
+      <button class="pc-add" (click)="onAddToCart($event)">+</button>
+    </div>
+  </div>
+</div>

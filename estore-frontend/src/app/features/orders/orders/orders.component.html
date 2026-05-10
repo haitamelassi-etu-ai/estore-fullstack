@@ -1,0 +1,37 @@
+<section class="mb-4">
+  <h1 class="h3 mb-1">Order history</h1>
+  <p class="text-secondary mb-0">Track your previous purchases.</p>
+</section>
+
+<div class="alert alert-secondary" *ngIf="loading">Loading orders...</div>
+
+<div class="alert alert-dark border-secondary-subtle" *ngIf="!loading && !orders.length">
+  No orders found yet.
+  <a routerLink="/catalog" class="link-warning text-decoration-none ms-1">Start shopping</a>
+</div>
+
+<div class="d-grid gap-3" *ngIf="!loading && orders.length">
+  <article class="card order-card" *ngFor="let order of orders">
+    <div class="card-body">
+      <div class="d-flex flex-wrap justify-content-between align-items-start gap-2 mb-3">
+        <div>
+          <h2 class="h6 mb-1">Order #{{ order.id }}</h2>
+          <small class="text-secondary">{{ order.orderDate | date:'dd/MM/yyyy' }}</small>
+        </div>
+        <span class="status-pill" [ngClass]="statusClass(order.status)">{{ order.status }}</span>
+      </div>
+
+      <ul class="list-unstyled mb-3">
+        <li *ngFor="let item of order.items" class="d-flex justify-content-between py-1 border-bottom border-secondary-subtle">
+          <span>{{ item.product.name }} × {{ item.quantity }}</span>
+          <span>{{ item.unitPrice * item.quantity | currency:'EUR':'symbol':'1.2-2' }}</span>
+        </li>
+      </ul>
+
+      <div class="d-flex justify-content-between fw-semibold">
+        <span>Total</span>
+        <span>{{ order.totalAmount | currency:'EUR':'symbol':'1.2-2' }}</span>
+      </div>
+    </div>
+  </article>
+</div>

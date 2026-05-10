@@ -1,0 +1,8 @@
+.app-navbar {
+  background: rgba(11, 15, 25, 0.95);
+  backdrop-filter: blur(8px);
+}
+
+.nav-link.active {
+  color: var(--color-primary) !important;
+}

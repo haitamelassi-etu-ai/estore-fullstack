@@ -1,0 +1,37 @@
+<nav class="navbar" [class.scrolled]="scrolled">
+  <a class="logo" routerLink="/">E<span>·Store</span></a>
+
+  <ul class="nav-links">
+    <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">Accueil</a></li>
+    <li><a routerLink="/catalog" routerLinkActive="active">Catalogue</a></li>
+    <li *ngIf="authService.isLoggedIn">
+      <a routerLink="/orders" routerLinkActive="active">Commandes</a>
+    </li>
+    <li *ngIf="authService.isLoggedIn">
+      <a routerLink="/profile" routerLinkActive="active">Profil</a>
+    </li>
+  </ul>
+
+  <div class="nav-right">
+    <a routerLink="/catalog" class="icon-btn" title="Rechercher">
+      <app-icon name="search" [size]="17"></app-icon>
+    </a>
+
+    <a routerLink="/cart" class="icon-btn" title="Panier">
+      <app-icon name="cart" [size]="18"></app-icon>
+      <span class="cart-badge" *ngIf="cartCount > 0">{{ cartCount }}</span>
+    </a>
+
+    <ng-container *ngIf="!authService.isLoggedIn; else loggedIn">
+      <a routerLink="/auth/login" class="btn btn-gold">Connexion</a>
+    </ng-container>
+
+    <ng-template #loggedIn>
+      <span class="user-name">
+        <app-icon name="user" [size]="15"></app-icon>
+        {{ authService.currentUser?.firstName }}
+      </span>
+      <button class="btn btn-ghost" (click)="logout()">Déconnexion</button>
+    </ng-template>
+  </div>
+</nav>

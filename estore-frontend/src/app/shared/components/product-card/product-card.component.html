@@ -1,0 +1,37 @@
+<article class="card product-card h-100">
+  <div class="card-body d-flex flex-column">
+    <div class="product-image mb-3">
+      <img
+        *ngIf="product.imageUrl; else noImage"
+        [src]="product.imageUrl"
+        [alt]="product.name"
+        class="img-fluid rounded"
+      />
+      <ng-template #noImage>
+        <div class="placeholder-image rounded d-flex align-items-center justify-content-center">
+          {{ product.name.charAt(0) }}
+        </div>
+      </ng-template>
+    </div>
+
+    <span class="badge text-bg-dark align-self-start mb-2">{{ product.category.name }}</span>
+    <h3 class="h6">{{ product.name }}</h3>
+    <p class="text-secondary small flex-grow-1">{{ product.description }}</p>
+    <p class="fw-semibold mb-2">{{ product.price | currency:'EUR':'symbol':'1.2-2' }}</p>
+    <p class="small mb-3" [class.text-danger]="product.inventoryQuantity < 1">
+      Stock: {{ product.inventoryQuantity }}
+    </p>
+
+    <div class="d-flex gap-2 mt-auto">
+      <button class="btn btn-outline-light btn-sm flex-fill" type="button" (click)="viewDetail.emit(product)">Details</button>
+      <button
+        class="btn btn-warning btn-sm flex-fill"
+        type="button"
+        [disabled]="product.inventoryQuantity < 1"
+        (click)="addToCart.emit(product)"
+      >
+        {{ product.inventoryQuantity < 1 ? 'Out of stock' : 'Add' }}
+      </button>
+    </div>
+  </div>
+</article>

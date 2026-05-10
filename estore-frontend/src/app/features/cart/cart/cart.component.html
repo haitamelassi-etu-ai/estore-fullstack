@@ -1,0 +1,86 @@
+<section class="d-flex justify-content-between align-items-center mb-4">
+  <h1 class="h3 mb-0">Your Cart</h1>
+  <span class="text-secondary">{{ cart?.items?.length || 0 }} items</span>
+</section>
+
+<div class="alert alert-secondary" *ngIf="loading">Loading cart...</div>
+
+<ng-container *ngIf="!loading">
+  <div class="alert alert-dark border-secondary-subtle" *ngIf="!cart?.items?.length">
+    Your cart is currently empty.
+    <a routerLink="/catalog" class="link-warning text-decoration-none ms-1">Continue shopping</a>
+  </div>
+
+  <div class="row g-4" *ngIf="cart?.items?.length">
+    <div class="col-lg-8">
+      <div class="table-responsive">
+        <table class="table table-dark table-borderless align-middle">
+          <thead>
+            <tr class="text-secondary">
+              <th>Product</th>
+              <th>Unit Price</th>
+              <th>Quantity</th>
+              <th>Total</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of cart?.items">
+              <td>
+                <strong>{{ item.product.name }}</strong>
+              </td>
+              <td>{{ item.unitPrice | currency:'EUR':'symbol':'1.2-2' }}</td>
+              <td>
+                <div class="btn-group btn-group-sm" role="group" aria-label="Quantity controls">
+                  <button class="btn btn-outline-light" type="button" (click)="updateQuantity(item, item.quantity - 1)">-</button>
+                  <button class="btn btn-outline-light disabled" type="button">{{ item.quantity }}</button>
+                  <button class="btn btn-outline-light" type="button" (click)="updateQuantity(item, item.quantity + 1)">+</button>
+                </div>
+              </td>
+              <td>{{ item.unitPrice * item.quantity | currency:'EUR':'symbol':'1.2-2' }}</td>
+              <td>
+                <button
+                  class="btn btn-sm btn-outline-danger"
+                  type="button"
+                  [disabled]="processingItemId === item.id"
+                  (click)="removeItem(item)"
+                >
+                  Remove
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="col-lg-4">
+      <div class="card summary-card">
+        <div class="card-body">
+          <h2 class="h5 mb-3">Summary</h2>
+          <div class="d-flex justify-content-between mb-2">
+            <span>Subtotal</span>
+            <span>{{ subtotal | currency:'EUR':'symbol':'1.2-2' }}</span>
+          </div>
+          <div class="d-flex justify-content-between mb-2" *ngIf="discountPercent > 0">
+            <span>Discount ({{ discountPercent }}%)</span>
+            <span>-{{ discountAmount | currency:'EUR':'symbol':'1.2-2' }}</span>
+          </div>
+          <div class="d-flex justify-content-between fw-semibold mb-3">
+            <span>Total</span>
+            <span>{{ total | currency:'EUR':'symbol':'1.2-2' }}</span>
+          </div>
+
+          <div class="input-group mb-3">
+            <input type="text" class="form-control" [(ngModel)]="promoCode" placeholder="Promo code" />
+            <button class="btn btn-outline-warning" type="button" (click)="applyPromo()">Apply</button>
+          </div>
+
+          <button class="btn btn-warning w-100" type="button" (click)="checkout()" [disabled]="checkingOut">
+            {{ checkingOut ? 'Processing...' : 'Checkout' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>
